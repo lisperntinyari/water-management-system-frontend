@@ -1,13 +1,10 @@
 import React from 'react';
 import SidebarItem from "../components/SidebarItem.jsx";
-import {Route, Routes} from "react-router-dom";
-import AllTenants from "../components/AllTenants.jsx";
-import DashboardInfo from "../components/DashboardInfo.jsx";
+import {Outlet} from "react-router-dom";
 
-const AdminDashboardPage = () => {
+const AdminDashboardScreen = () => {
     return (
         <div>
-            <h1>Admin Dashboard Page</h1>
             <button data-drawer-target="separator-sidebar" data-drawer-toggle="separator-sidebar"
                     aria-controls="separator-sidebar" type="button"
                     className="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
@@ -26,42 +23,22 @@ const AdminDashboardPage = () => {
                     <ul className="space-y-2 font-medium">
                         <SidebarItem
                             name="Dashboard"
-                            route="/"
+                            route="/admin/dashboard"
                         />
                         <SidebarItem
                             name="Tenants"
-                            route="/tenants"
+                            route="/admin/dashboard/tenants/all"
                         />
                         <SidebarItem
-                            name="Add Bills"
-                            route="/addBills"/>
-                        <SidebarItem
-                            name="Market Place"
-                            onClick={() => {
-
-                            }}
-                        />
-
+                            name="Bills"
+                            route="/admin/dashboard/bills/all"/>
 
                     </ul>
                 </div>
             </aside>
+            <div className="ml-64">
 
-            <div className="p-4 sm:ml-64">
-                <Routes>
-                    <Route
-                        path="/"
-                        element={
-                            <DashboardInfo/>
-                        }
-                    />
-                    <Route
-                        path="/tenants"
-                        element={
-                            <AllTenants/>
-                        }
-                    />
-                </Routes>
+                <Outlet/>
 
             </div>
 
@@ -70,4 +47,4 @@ const AdminDashboardPage = () => {
     );
 };
 
-export default AdminDashboardPage;
+export default AdminDashboardScreen;

@@ -1,10 +1,10 @@
 import React from 'react';
-import AllTenants from "./AllTenants.jsx";
+import AllTenantsScreen from "./AllTenantsScreen.jsx";
 
 const DashboardInfo = () => {
     return (
         <div>
-            <AllTenants/>
+            Dashboard
         </div>
     );
 };

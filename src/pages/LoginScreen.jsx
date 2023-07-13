@@ -1,12 +1,14 @@
 import React, {useState} from 'react';
 import axios from "axios";
 import BASE_URL from "../util/BASE_URL.js";
+import {useNavigate} from "react-router-dom";
+import Constants from "../util/Constants.js";
 
 
-const LoginPage = () => {
+const LoginScreen = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-
+    const navigate = useNavigate();
 
     const onSubmit = async (e) => {
         e.preventDefault()
@@ -19,6 +21,15 @@ const LoginPage = () => {
                     password,
                 })
                 console.log("Response from server ", response.data)
+                if (response.data.success) {
+                    localStorage.setItem("user", JSON.stringify(response.data.user))
+                    if (response.data.user.authType === Constants.ADMIN) {
+                        navigate("/admin/dashboard")
+                    } else {
+                        navigate("/tenant/dashboard")
+                    }
+
+                }
             } catch (e) {
                 console.log("Error occurred login", e)
 
@@ -101,4 +112,4 @@ const LoginPage = () => {
     );
 };
 
-export default LoginPage;
+export default LoginScreen;
