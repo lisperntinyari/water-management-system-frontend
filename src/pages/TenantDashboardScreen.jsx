@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TenantDashboardPage = () => {
+const TenantDashboardScreen = () => {
     return (
         <div>
             <h1>Tenant Dashboard Page</h1>
@@ -8,4 +8,4 @@ const TenantDashboardPage = () => {
     );
 };
 
-export default TenantDashboardPage;
+export default TenantDashboardScreen;
