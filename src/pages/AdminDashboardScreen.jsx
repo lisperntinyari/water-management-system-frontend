@@ -26,6 +26,9 @@ const AdminDashboardScreen = () => {
                             route="/admin/dashboard"
                         />
                         <SidebarItem
+                            name="Houses"
+                            route="/admin/dashboard/houses/all"/>
+                        <SidebarItem
                             name="Tenants"
                             route="/admin/dashboard/tenants/all"
                         />

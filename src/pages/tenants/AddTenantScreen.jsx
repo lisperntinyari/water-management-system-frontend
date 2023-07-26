@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import axios from "axios";
-import BASE_URL from "../util/BASE_URL.js";
+import BASE_URL from "../../util/BASE_URL.js";
 
 const AddTenantScreen = () => {
     const [phoneNumber, setPhoneNumber] = useState("")
@@ -29,8 +29,8 @@ const AddTenantScreen = () => {
     }
     return (
         <section className="bg-gray-50 dark:bg-gray-900">
-            <div className="flex  h-screen">
-                <form onSubmit={addTenant}>
+            <div className="flex h-screen justify-center items-center p-8">
+                <form onSubmit={addTenant} className="w-full h-full">
                     <div className="grid md:grid-cols-2 md:gap-6">
                         <div className="relative z-0 w-full mb-6 group">
                             <input type="text" name="floating_first_name" id="floating_first_name"
