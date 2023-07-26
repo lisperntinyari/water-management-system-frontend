@@ -1,6 +1,6 @@
 import React from 'react';
 import {useQuery} from "@tanstack/react-query";
-import getAllTenants from "../api/getAllTenants.js";
+import getAllTenants from "../../api/getAllTenants.js";
 import {useNavigate} from "react-router-dom";
 
 const AllTenantsScreen = () => {
