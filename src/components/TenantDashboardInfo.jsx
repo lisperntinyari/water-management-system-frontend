@@ -1,23 +1,42 @@
 import React from 'react';
-import {useQuery} from "@tanstack/react-query";
+import {tenantData} from "./PrivateRoute.jsx";
 import {useNavigate} from "react-router-dom";
-import getAllBills from "../../api/getAllBills.js";
-import DashboardHeader from "../../components/DashboardHeader.jsx";
+import {useTenantData} from "../store/UserDataStore.js";
+import DashboardCard from "./DashboardCard.jsx";
+import {getTotalPaidBills, getTotalUnpaidBills} from "../util/mathFunctions.js";
+import {useQuery} from "@tanstack/react-query";
+import getBillsByHouseNo from "../api/getBillsByHouseNo.js";
+import DashboardHeader from "./DashboardHeader.jsx";
+import {months} from "../util/Constants.js";
 
-const AllBillsScreen = () => {
+const TenantDashboardInfo = () => {
+    const userId = tenantData?.tenantId || "null"
     const navigate = useNavigate()
-    const {data, isLoading, error, isError} = useQuery(["bills"], getAllBills)
+    const tenant = useTenantData((state) => state.tenant)
+    const {data: bills} = useQuery(
+        [`bills/${tenant.tenantId}`], () => getBillsByHouseNo(tenant.houseNo))
+    const logOut = () => {
+        localStorage.removeItem("tenant")
+        navigate("/login")
+    }
     return (
-        <div className="w-full h-screen  bg-gray-900 ">
-            <DashboardHeader name="All Bills"/>
-            <div className="p-8">
+        <section className="w-full h-screen bg-gray-900">
+            <DashboardHeader name="Tenant Dashboard"/>
+            <div className="p-8 w-full h-full">
                 <div className="w-full h-16 flex items-center justify-end">
                     <button
-                        onClick={() => navigate("/admin/dashboard/bills/add")}
+                        onClick={logOut}
                         className="text-white m-4 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-                        Add Bill
+                        Logout
                     </button>
                 </div>
+                <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
+                    { bills && (<DashboardCard metricAmount={`Ksh ${getTotalPaidBills(bills)} /=`} metricName="Total bill amount Paid"/>) }
+                    { bills && (<DashboardCard metricAmount={`Ksh ${getTotalUnpaidBills(bills)} /=`} metricName="Total bill amount not Paid"/>) }
+                </div>
+                <h1 className="block m-6 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">
+                    Unpaid Bills
+                </h1>
                 <div className="overflow-x-auto shadow-md sm:rounded-lg">
                     <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -53,10 +72,10 @@ const AllBillsScreen = () => {
                         </thead>
                         <tbody>
                         {
-                            data && (
+                            bills && (
                                 <>
                                     {
-                                        data.map((bill, index) => {
+                                        bills.filter( (bill) => bill.status ==="Not Paid").map((bill, index) => {
                                             return (
                                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                                                     key={index}>
@@ -77,13 +96,14 @@ const AllBillsScreen = () => {
                                                         {bill.units}
                                                     </td>
                                                     <td className="px-6 py-4">
-                                                        {bill.month}
+                                                        {months[Number(bill.month) - 1]}
                                                     </td>
                                                     <td className="px-6 py-4">
                                                         {bill.year}
                                                     </td>
                                                     <td className="px-6 py-4">
-                                                        {bill.status}
+                                                        <p className={`font-bold ${bill.status === "Not Paid" ? "text-red-700" : "text-green-700"}`}>{bill.status}</p>
+
                                                     </td>
 
                                                     <td className="px-6 py-4 text-right">
@@ -102,8 +122,8 @@ const AllBillsScreen = () => {
                 </div>
             </div>
 
-        </div>
+        </section>
     );
 };
 
-export default AllBillsScreen;
+export default TenantDashboardInfo;
