@@ -1,16 +1,21 @@
 import React from 'react';
-import {useQuery} from "@tanstack/react-query";
 import {useNavigate} from "react-router-dom";
-import getAllBills from "../../api/getAllBills.js";
+import {useQuery} from "@tanstack/react-query";
+import {useTenantData} from "../../store/UserDataStore.js";
+import getBillsByHouseNo from "../../api/getBillsByHouseNo.js";
+import {months} from "../../util/Constants.js";
 import DashboardHeader from "../../components/DashboardHeader.jsx";
 
-const AllBillsScreen = () => {
+const AllTenantBillsScreen = () => {
+    const tenant = useTenantData((state) => state.tenant)
+    console.log("Tenant",tenant)
     const navigate = useNavigate()
-    const {data, isLoading, error, isError} = useQuery(["bills"], getAllBills)
+    const {data: bills} = useQuery(
+        [`bills/${tenant.tenantId}`], () => getBillsByHouseNo(tenant.houseNo))
     return (
-        <div className="w-full h-screen  bg-gray-900 ">
-            <DashboardHeader name="All Bills"/>
-            <div className="p-8">
+        <div className="w-full h-screen  bg-gray-900">
+            <DashboardHeader name="Your tenant water bills"/>
+            <div className="w-full h-full p-8">
                 <div className="w-full h-16 flex items-center justify-end">
                     <button
                         onClick={() => navigate("/admin/dashboard/bills/add")}
@@ -53,10 +58,10 @@ const AllBillsScreen = () => {
                         </thead>
                         <tbody>
                         {
-                            data && (
+                            bills && (
                                 <>
                                     {
-                                        data.map((bill, index) => {
+                                        bills.map((bill, index) => {
                                             return (
                                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                                                     key={index}>
@@ -77,13 +82,14 @@ const AllBillsScreen = () => {
                                                         {bill.units}
                                                     </td>
                                                     <td className="px-6 py-4">
-                                                        {bill.month}
+                                                        {months[Number(bill.month) - 1]}
                                                     </td>
                                                     <td className="px-6 py-4">
                                                         {bill.year}
                                                     </td>
                                                     <td className="px-6 py-4">
-                                                        {bill.status}
+                                                        <p className={`font-bold ${bill.status === "Not Paid" ? "text-red-700" : "text-green-700"}`}>{bill.status}</p>
+
                                                     </td>
 
                                                     <td className="px-6 py-4 text-right">
@@ -106,4 +112,4 @@ const AllBillsScreen = () => {
     );
 };
 
-export default AllBillsScreen;
+export default AllTenantBillsScreen;

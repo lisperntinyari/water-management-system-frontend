@@ -1,12 +1,22 @@
 import React, {useState} from 'react';
 import axios from "axios";
 import BASE_URL from "../../util/BASE_URL.js";
+import {toast, ToastContainer} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"
+import DashboardHeader from "../../components/DashboardHeader.jsx";
 
 const AddTenantScreen = () => {
     const [phoneNumber, setPhoneNumber] = useState("")
     const [email, setEmail] = useState("")
     const [houseNo, setHouseNo] = useState("")
     const [fullName, setFullName] = useState("")
+
+    function clearInputs(){
+        setEmail("")
+        setHouseNo("")
+        setFullName("")
+        setPhoneNumber("")
+    }
 
 
     const addTenant = async (e) => {
@@ -21,14 +31,22 @@ const AddTenantScreen = () => {
                     houseNo,
                     phoneNumber
                 })
-                alert(response.data.msg)
+                if (response.data.success){
+                    toast.success(response.data.msg)
+                    clearInputs()
+                }else {
+                    toast.error(response.data.msg)
+                }
             } catch (e) {
+                toast.error("An unexpected error occurred trying to create a tenant")
                 console.log("Error trying to create tenant", e)
             }
         }
     }
     return (
         <section className="bg-gray-50 dark:bg-gray-900">
+            <ToastContainer/>
+            <DashboardHeader name="Add Tenant"/>
             <div className="flex h-screen justify-center items-center p-8">
                 <form onSubmit={addTenant} className="w-full h-full">
                     <div className="grid md:grid-cols-2 md:gap-6">

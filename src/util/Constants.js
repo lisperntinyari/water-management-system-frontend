@@ -1,5 +1,8 @@
 
-
+const months = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+]
 
 const AUTH_TYPES = {
     ADMIN: "admin",
@@ -11,5 +14,5 @@ const HouseTypes = [
     "2-Bedroom",
     "3-Bedroom",
 ]
-export { HouseTypes }
+export { HouseTypes,months }
 export default AUTH_TYPES

@@ -2,6 +2,8 @@ import React, {useState} from "react";
 import {HouseTypes} from "../../util/Constants.js";
 import axios from "axios";
 import BASE_URL from "../../util/BASE_URL.js";
+import {toast, ToastContainer} from "react-toastify";
+import DashboardHeader from "../../components/DashboardHeader.jsx";
 
 const AddHouseScreen = () => {
     const [houseNo,setHouseNo] = useState("")
@@ -21,16 +23,21 @@ const AddHouseScreen = () => {
                     houseType,
                     meterNo
                 })
-                alert(res.data.msg)
+                if (res.data.success){
+                    toast.success(res.data.msg)
+                }else {
+                    toast.error(res.data.msg)
+                }
             }catch (e){
                 console.log(e)
-                alert(e.message)
-
+                toast.error("An unexpected error occurred trying to add a house")
             }
         }
     }
     return (
         <section className="bg-gray-50 dark:bg-gray-900">
+            <ToastContainer/>
+            <DashboardHeader name="Add a Housing Unit"/>
             <div className="flex h-screen justify-center items-center p-8">
                 <form onSubmit={addHouse} className="w-full h-full">
                     <div className="grid md:grid-cols-2 md:gap-6">

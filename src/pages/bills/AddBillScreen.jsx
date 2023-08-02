@@ -3,6 +3,9 @@ import axios from "axios";
 import BASE_URL from "../../util/BASE_URL.js";
 import {useQuery} from "@tanstack/react-query";
 import getAllHouses from "../../api/getAllHouses.js";
+import {toast, ToastContainer} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"
+import DashboardHeader from "../../components/DashboardHeader.jsx";
 
 const AddBillScreen = () => {
     const {data: houses, isLoading, error, isError} = useQuery(["houses"], getAllHouses)
@@ -18,7 +21,7 @@ const AddBillScreen = () => {
     const addBill = async (e) => {
         e.preventDefault()
         if (meterNo === "" || houseNo === "" || amount === "" || month === "" || year === "" || status === "" || units === "") {
-            alert("Please fill in the fields")
+            toast.error("Please fill in the fields")
         } else {
             try {
                 const res = await axios.post(`${BASE_URL}/bills/create`, {
@@ -30,16 +33,23 @@ const AddBillScreen = () => {
                     status,
                     units,
                 })
-                alert(res.data.msg)
+                if (res.data.msg) {
+                    toast.success(res.data.msg)
+                } else {
+                    toast.error(res.data.msg)
+                }
+
             } catch (e) {
                 console.log(e)
-                alert(e.message)
+                toast.error(e.message)
 
             }
         }
     }
     return (
         <section className="bg-gray-50 dark:bg-gray-900">
+            <ToastContainer/>
+            <DashboardHeader name="Add a Bill"/>
             <div className="flex h-screen justify-center items-center p-8">
                 <form onSubmit={addBill} className="w-full h-full">
                     <div className="grid md:grid-cols-2 md:gap-6">
@@ -48,13 +58,14 @@ const AddBillScreen = () => {
                                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                 House No.
                             </label>
-                            <select id="houseType"
-                                    onChange={(e) => {
-                                        setHouseNo(e.target.value)
-                                        const passedMeterNo = houses.find((house) => house.houseNo === e.target.value).meterNo
-                                        setMeterNo(passedMeterNo)
-                                    }}
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <select
+                                id="houseType"
+                                onChange={(e) => {
+                                    setHouseNo(e.target.value)
+                                    const passedMeterNo = houses.find((house) => house.houseNo === e.target.value).meterNo
+                                    setMeterNo(passedMeterNo)
+                                }}
+                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <option selected value="">Choose a House Type</option>
                                 {
                                     houses && houses.map((house, index) => {
