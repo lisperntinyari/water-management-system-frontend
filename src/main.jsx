@@ -21,6 +21,7 @@ import TenantDashboardInfo from "./components/TenantDashboardInfo.jsx";
 import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
 import AllTenantBillsScreen from "./pages/bills/AllTenantBillsScreens.jsx";
 import MarketPlaceScreen from "./pages/marketplace/MarketPlaceScreen.jsx";
+import CartScreen from "./pages/marketplace/CartScreen.jsx";
 
 
 const router = createBrowserRouter(
@@ -47,6 +48,7 @@ const router = createBrowserRouter(
                     <Route index element={<TenantDashboardInfo />} />
                     <Route path="bills/all" element={<AllTenantBillsScreen/>}/>
                     <Route path="marketplace" element={<MarketPlaceScreen/>}/>
+                    <Route path="cart" element={<CartScreen/>}/>
                 </Route>
             </Route>
         </Route>
@@ -57,7 +59,7 @@ const queryClient = new QueryClient()
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
       <QueryClientProvider client={queryClient}>
-          <ReactQueryDevtools initialIsOpen={false} />
+          {/*<ReactQueryDevtools initialIsOpen={false} />*/}
           <RouterProvider router={router}/>
       </QueryClientProvider>
   </React.StrictMode>,

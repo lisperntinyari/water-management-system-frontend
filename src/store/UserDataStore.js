@@ -12,4 +12,38 @@ const useTenantData = create((set) => ({
     unsetTenant: () => set({ tenant:null }),
 }))
 
-export { useAdminData,useTenantData }
+
+const useCartStore = create((set) => ({
+    cart:[],
+    addToCart:(item) =>
+        set((state) => {
+            const existingItem = state.cart.find((cartItem) => cartItem.name === item.name);
+            if (existingItem) {
+                return {
+                    cart: state.items.map((cartItem) =>
+                        cartItem.name === item.name
+                            ? { ...cartItem, quantity: cartItem.quantity + 1 }
+                            : cartItem
+                    ),
+                };
+            } else {
+                return { cart: [...state.cart, { ...item, quantity: 1 }] };
+            }
+        }),
+    removeCart: (itemId) => set((state) => ({ cart: state.cart.filter((item) => item.name !== itemId) })),
+    clearCart: () => set({ cart: [] }),
+    addQuantity: (itemId) =>
+        set((state) => ({
+            cart: state.cart.map((item) =>
+                item.name === itemId ? { ...item, quantity: item.quantity + 1 } : item
+            ),
+        })),
+    reduceQuantity:(itemId) =>
+        set((state) => ({
+            cart: state.cart.map((item) =>
+                item.name === itemId ? { ...item, quantity: item.quantity === 1 ? 1 : item.quantity - 1 } : item
+            ),
+        })),
+}))
+
+export { useAdminData,useTenantData,useCartStore }

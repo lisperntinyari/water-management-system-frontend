@@ -65,9 +65,6 @@ const TenantDashboardInfo = () => {
                             <th scope="col" className="px-6 py-3">
                                 Status
                             </th>
-                            <th scope="col" className="px-6 py-3">
-                                <span className="sr-only">Edit</span>
-                            </th>
                         </tr>
                         </thead>
                         <tbody>
@@ -104,11 +101,6 @@ const TenantDashboardInfo = () => {
                                                     <td className="px-6 py-4">
                                                         <p className={`font-bold ${bill.status === "Not Paid" ? "text-red-700" : "text-green-700"}`}>{bill.status}</p>
 
-                                                    </td>
-
-                                                    <td className="px-6 py-4 text-right">
-                                                        <a href="#"
-                                                           className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
                                                     </td>
                                                 </tr>
                                             )
