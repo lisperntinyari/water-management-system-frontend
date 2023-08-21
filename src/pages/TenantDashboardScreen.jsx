@@ -2,9 +2,9 @@ import React, {useEffect} from 'react';
 import SidebarItem from "../components/SidebarItem.jsx";
 import {Outlet, useNavigate} from "react-router-dom";
 import {tenantData} from "../components/PrivateRoute.jsx";
+import {useTenantData} from "../store/UserDataStore.js";
 
 const TenantDashboardScreen = () => {
-
 
     const navigate = useNavigate()
 
@@ -37,6 +37,9 @@ const TenantDashboardScreen = () => {
                         <SidebarItem
                             name="Market Place"
                             route="/tenant/dashboard/marketplace"/>
+                        <SidebarItem
+                            name="Cart"
+                            route="/tenant/dashboard/cart"/>
 
                     </ul>
                 </div>

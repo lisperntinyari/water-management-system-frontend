@@ -1,16 +1,20 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import {useQuery} from "@tanstack/react-query";
 import getAllHouses from "../../api/getAllHouses.js";
 import DashboardHeader from "../../components/DashboardHeader.jsx";
+import DeleteHouseModal from "../../components/modals/DeleteHouseModal.jsx";
 
 const AllHousesScreen = () => {
     const navigate = useNavigate()
+    const [activeDeleteHouse,setActiveDeleteHouse] = useState(null)
+
     const {data, isLoading, error, isError} = useQuery(["houses"], getAllHouses)
     return (
         <section className="w-full h-screen bg-gray-900">
             <DashboardHeader name="Your Housing Units "/>
             <div className="p-8 w-full h-full">
+
                 <div className="w-full h-16 flex items-center justify-end">
                     <button
                         onClick={() => navigate("/admin/dashboard/houses/add")}
@@ -20,7 +24,8 @@ const AllHousesScreen = () => {
                 </div>
                 <div className="overflow-x-auto shadow-md sm:rounded-lg">
                     <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <thead
+                            className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
                             <th scope="col" className="px-6 py-3">
                                 House ID
@@ -80,6 +85,9 @@ const AllHousesScreen = () => {
                             <th scope="col" className="px-6 py-3">
                                 <span className="sr-only">Edit</span>
                             </th>
+                            <th scope="col" className="px-6 py-3">
+                                <span className="sr-only">Delete</span>
+                            </th>
                         </tr>
                         </thead>
                         <tbody>
@@ -112,6 +120,15 @@ const AllHousesScreen = () => {
                                                         <a href="#"
                                                            className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
                                                     </td>
+                                                    <td className="px-6 py-4 text-right">
+                                                        <button
+                                                            onClick={() => setActiveDeleteHouse(house)}
+                                                            data-modal-target={`delete-house-modal`}
+                                                            data-modal-toggle={`delete-house-modal`}
+                                                            className="font-medium text-red-600 dark:text-red-500 hover:underline">Delete
+                                                        </button>
+                                                    </td>
+
                                                 </tr>
                                             )
                                         })
@@ -121,6 +138,8 @@ const AllHousesScreen = () => {
                         }
                         </tbody>
                     </table>
+                    { activeDeleteHouse != null && <DeleteHouseModal house={activeDeleteHouse}/> }
+
                 </div>
             </div>
 

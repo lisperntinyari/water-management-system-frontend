@@ -36,12 +36,11 @@ const AdminDashboardInfo = () => {
                     </button>
                 </div>
                 <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
-                    { admin && <h1>Admin {admin.email}</h1> }
                     { tenants &&(<DashboardCard metricAmount={tenants.length} metricName="Total No. of Tenants"/>) }
                     { houses && (<DashboardCard metricAmount={houses.length} metricName="Total No. of House Units"/>) }
                     { bills && (<DashboardCard metricAmount={`Ksh ${getTotalPaidBills(bills)} /=`} metricName="Total bill amount Paid"/>) }
                     { bills && (<DashboardCard metricAmount={`Ksh ${getTotalUnpaidBills(bills)} /=`} metricName="Total bill amount not Paid"/>) }
-
+                    { admin && <h1 className="text-white">Admin {admin.email}</h1> }
 
 
                 </div>
