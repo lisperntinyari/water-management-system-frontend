@@ -8,7 +8,7 @@ const AllBillsScreen = () => {
     const navigate = useNavigate()
     const {data, isLoading, error, isError} = useQuery(["bills"], getAllBills)
     return (
-        <div className="w-full h-screen  bg-gray-900 ">
+        <div className="w-full min-h-screen  bg-gray-900 ">
             <DashboardHeader name="All Bills"/>
             <div className="p-8">
                 <div className="w-full h-16 flex items-center justify-end">
