@@ -5,20 +5,42 @@ import {useTenantData} from "../../store/UserDataStore.js";
 import getBillsByHouseNo from "../../api/getBillsByHouseNo.js";
 import {months} from "../../util/Constants.js";
 import DashboardHeader from "../../components/DashboardHeader.jsx";
+import axios from "axios";
+import BASE_URL from "../../util/BASE_URL.js";
+import {toast} from "react-toastify";
 
 const AllTenantBillsScreen = () => {
     const tenant = useTenantData((state) => state.tenant)
-    console.log("Tenant",tenant)
+    console.log("Tenant", tenant)
     const navigate = useNavigate()
     const {data: bills} = useQuery(
         [`bills/${tenant.tenantId}`], () => getBillsByHouseNo(tenant.houseNo))
+    const payBill = async (phoneNumber, billAmount) => {
+        try {
+            const response = await axios.post(`${BASE_URL}/pay/payWaterBill`, {
+                phoneNumber: phoneNumber,
+                billAmount: billAmount
+            })
+            console.log("Payment Info", response.data)
+            if (response.data.success) {
+                toast.success("Payment initiated")
+            } else {
+                toast.error("")
+            }
+        } catch (e) {
+            console.log(e)
+            toast.error("An error occurred initiating payment")
+        }
+
+    }
     return (
         <div className="w-full h-screen  bg-gray-900">
             <DashboardHeader name="Your tenant water bills"/>
             <div className="w-full h-full p-8">
                 <div className="overflow-x-auto shadow-md sm:rounded-lg">
                     <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <thead
+                            className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
                             <th scope="col" className="px-6 py-3">
                                 Bill ID
@@ -45,7 +67,6 @@ const AllTenantBillsScreen = () => {
                                 Status
                             </th>
                             <th scope="col" className="px-6 py-3">
-                                <span className="sr-only">Edit</span>
                             </th>
                         </tr>
                         </thead>
@@ -82,7 +103,21 @@ const AllTenantBillsScreen = () => {
                                                     </td>
                                                     <td className="px-6 py-4">
                                                         <p className={`font-bold ${bill.status === "Not Paid" ? "text-red-700" : "text-green-700"}`}>{bill.status}</p>
+                                                    </td>
+                                                    <td className="px-6 py-4 text-right">
+                                                        {
+                                                            bill.status === "Not Paid" && (
 
+                                                                <button
+                                                                    onClick={async () => {
+                                                                        await payBill(Number(tenant.phoneNumber), Number(bill.amount))
+                                                                    }}
+                                                                    className="font-medium text-indigo-600 dark:text-indigo-500 hover:underline">Pay
+                                                                    Bill
+                                                                </button>
+
+                                                            )
+                                                        }
                                                     </td>
                                                 </tr>
                                             )

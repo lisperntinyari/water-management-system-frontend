@@ -40,6 +40,9 @@ const TenantDashboardScreen = () => {
                         <SidebarItem
                             name="Cart"
                             route="/tenant/dashboard/cart"/>
+                        <SidebarItem
+                            name="Issues"
+                            route="/tenant/dashboard/issues"/>
 
                     </ul>
                 </div>

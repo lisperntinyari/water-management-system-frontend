@@ -35,6 +35,9 @@ const AdminDashboardScreen = () => {
                         <SidebarItem
                             name="Bills"
                             route="/admin/dashboard/bills/all"/>
+                        <SidebarItem
+                            name="Issues"
+                            route="/admin/dashboard/issues"/>
 
                     </ul>
                 </div>
